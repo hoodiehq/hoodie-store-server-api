@@ -1,0 +1,56 @@
+{
+  "name": "@hoodie/store-server-api",
+  "description": "API to manage databases, access and replications, backed by PouchDB",
+  "main": "index.js",
+  "scripts": {
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "pretest": "standard",
+    "test": "nyc tap 'test/{unit,integration}/**/*-test.js'",
+    "start": "bin/server",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "postsemantic-release": "npm run coverage",
+    "postpublish": "greenkeeper-postpublish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hoodiehq/hoodie-store-server-api.git"
+  },
+  "keywords": [
+    "hapi",
+    "plugin",
+    "couchdb",
+    "pouchdb",
+    "hoodie"
+  ],
+  "author": "The Hoodie Community and other contributors | http://hood.ie/",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/hoodiehq/hoodie-store-server-api/issues"
+  },
+  "homepage": "https://github.com/hoodiehq/hoodie-store-server-api#readme",
+  "devDependencies": {
+    "coveralls": "^2.11.15",
+    "greenkeeper-postpublish": "^1.0.1",
+    "nock": "^9.0.2",
+    "nyc": "^10.0.0",
+    "pouchdb-adapter-http": "^6.1.0",
+    "pouchdb-adapter-memory": "^6.1.0",
+    "pouchdb-core": "^6.1.0",
+    "pouchdb-replication": "^6.1.0",
+    "proxyquire": "^1.7.10",
+    "semantic-release": "^6.3.2",
+    "standard": "^8.6.0",
+    "tap": "^8.0.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.3",
+    "mkdirp": "^0.5.1",
+    "pouchdb-hoodie-api": "^1.6.4",
+    "request": "^2.79.0",
+    "to-id": "^1.0.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.0.0-development"
+}
