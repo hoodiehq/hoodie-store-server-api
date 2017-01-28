@@ -40,7 +40,7 @@
     "proxyquire": "^1.7.10",
     "semantic-release": "^6.3.2",
     "standard": "^8.6.0",
-    "tap": "^9.0.0"
+    "tap": "^10.0.0"
   },
   "dependencies": {
     "lodash": "^4.17.3",
