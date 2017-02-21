@@ -17,6 +17,9 @@ test('Store', function (group) {
     t.is(typeof Store.revoke, 'function', 'Store.revoke()')
     t.is(typeof Store.replicate, 'function', 'Store.replicate()')
     t.is(typeof Store.cancelReplication, 'function', 'Store.cancelReplication()')
+    t.is(typeof Store.on, 'function', 'Store.on()')
+    t.is(typeof Store.one, 'function', 'Store.one()')
+    t.is(typeof Store.off, 'function', 'Store.off()')
 
     t.end()
   })
