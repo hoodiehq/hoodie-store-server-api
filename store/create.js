@@ -79,6 +79,8 @@ function createStore (state, name, options) {
   })
 
   .then(function () {
+    state.emitter.emit('create', name)
+
     return name
   })
 }
