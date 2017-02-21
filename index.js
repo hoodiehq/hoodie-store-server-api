@@ -1,5 +1,7 @@
 module.exports = StoreAPIFactory
 
+var EventEmitter = require('events').EventEmitter
+
 var hoodieApi = require('pouchdb-hoodie-api')
 var request = require('request').defaults({json: true})
 
@@ -7,6 +9,9 @@ var create = require('./store/create')
 var destroy = require('./store/destroy')
 var exists = require('./store/exists')
 var open = require('./store/open')
+var on = require('./store/on')
+var one = require('./store/one')
+var off = require('./store/off')
 
 var grantAccess = require('./store/grant')
 var hasAccess = require('./store/has-access')
@@ -78,7 +83,8 @@ function StoreAPIFactory (PouchDB) {
     couchDbUrl: couchDbUrl,
     usesHttpAdapter: usesHttpAdapter,
     replicationsReady: replicationsReady,
-    replicationsMap: replicationsMap
+    replicationsMap: replicationsMap,
+    emitter: new EventEmitter()
   }
   var Store = {}
 
@@ -93,6 +99,9 @@ function StoreAPIFactory (PouchDB) {
   Store.revoke = revokeAccess.bind(null, state)
   Store.replicate = replicate.bind(null, state)
   Store.cancelReplication = cancelReplication.bind(null, state)
+  Store.on = on.bind(Store, state)
+  Store.one = one.bind(Store, state)
+  Store.off = off.bind(Store, state)
 
   return Store
 }

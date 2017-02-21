@@ -19,6 +19,8 @@ function destroyStore (state, name) {
   })
 
   .then(function () {
+    state.emitter.emit('destroy', name)
+
     return name
   })
 }
