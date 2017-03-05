@@ -556,6 +556,9 @@ store.on('clear', function() {})
 store.one(eventName, eventHandlerFunction)
 store.off(eventName, eventHandlerFunction)
 
+// implicit id prefixes for methods and events
+store.withIdPrefix(prefix)
+
 // original PouchDB (http://pouchdb.com/api.html) instance used for the store
 store.db
 ```
