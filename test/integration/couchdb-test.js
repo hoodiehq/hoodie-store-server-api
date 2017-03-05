@@ -407,5 +407,79 @@ test('Store', function (group) {
     .catch(t.error)
   })
 
+  group.test('Store.exists("mydb") should not send another request after Store.create("mydb")', function (t) {
+    t.plan(1)
+
+    var TestPouchDB = PouchDB.defaults({
+      prefix: 'http://example.com/'
+    })
+    var Store = StoreAPIFactory(TestPouchDB)
+
+    var mock = nock('http://example.com/', {'encodedQueryParams': true})
+      // check if hoodie-store exists
+      .get('/hoodie-store/')
+      .reply(200)
+
+      // make sure hoodie-store is secured
+      .put('/hoodie-store/_security', {members: {roles: ['_hoodie_admin_only']}})
+      .reply(200, {ok: true})
+
+      // check for existing replications to restart
+      .get('/hoodie-store/_all_docs')
+      .query({include_docs: true, startkey: '%22replication_%22', endkey: '%22replication_%EF%BF%BF%22'})
+      .reply(200, {total_rows: 0, offset: 0, rows: []})
+
+      // check if database doc exists in hoodie-store
+      .get('/hoodie-store/db_couchdb-test-db')
+      .query({})
+      .reply(404)
+
+      .get('/hoodie-store/db_couchdb-test-db')
+      .query({})
+      .reply(function () {
+        t.error('should not send 2nd request: GET /hoodie-store/db_couchdb-test-db')
+      })
+
+      // create database doc in hoodie-store
+      .put('/hoodie-store/db_couchdb-test-db', {
+        _id: 'db_couchdb-test-db',
+        access: {read: {role: []}, write: {role: []}}
+      })
+      .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '1-00'})
+
+      // check if database exists
+      .get('/couchdb-test-db/')
+      .reply(404)
+
+      // create database
+      .put('/couchdb-test-db/')
+      .reply(201, {ok: true})
+
+      // respond to .info() – makes sure the database is fully setup
+      .get('/couchdb-test-db/')
+      .reply(200)
+
+      // create security for database – access by admins only by default
+      .put('/couchdb-test-db/_security', {
+        members: {roles: ['_hoodie_admin_only']}
+      })
+      .reply(200, {ok: true})
+
+    return Store.create('couchdb-test-db')
+
+    .then(function () {
+      // should not cause another request to CouchDB
+      return Store.exists('couchdb-test-db')
+    })
+
+    .then(function () {
+      // check if all mocks have been consumed, and show the first pending if not
+      // skip mock.pendingMocks()[0] as it’s the one we want to be skipped
+      t.is(mock.pendingMocks()[1], undefined)
+    })
+
+    .catch(t.error)
+  })
+
   group.end()
 })
