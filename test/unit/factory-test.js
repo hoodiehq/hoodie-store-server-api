@@ -7,7 +7,12 @@ var PouchDBMock = function () {
     hoodieApi: function () {
       return {
         db: {
-          __opts: {}
+          __opts: {},
+          changes: function () {
+            return {
+              on: function () {}
+            }
+          }
         },
         withIdPrefix: function () {
           return {

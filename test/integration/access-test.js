@@ -129,5 +129,44 @@ test('Store', function (group) {
     .catch(t.error)
   })
 
+  group.test('cache invalidation', function (t) {
+    t.plan(3)
+
+    var Store = StoreAPIFactory(PouchDB)
+
+    Store.create('cache-test-db', {
+      access: 'read'
+    })
+
+    .then(function () {
+      return Store.hasAccess('cache-test-db', {access: 'read'})
+    })
+
+    .then(function (hasAccess) {
+      t.is(hasAccess, true, 'is public-read')
+
+      var stateStore = new PouchDB('hoodie-store').hoodieApi()
+      return new Promise(function (resolve, reject) {
+        stateStore.on('update', resolve)
+
+        stateStore.update('db_cache-test-db', function (doc) {
+          doc.access.read.role = []
+        })
+      })
+    })
+
+    .then(function (doc) {
+      t.deepEqual(doc.access.read.role, [], 'db is no longer public read')
+
+      return Store.hasAccess('cache-test-db', {access: 'read'})
+    })
+
+    .then(function (hasAccess) {
+      t.is(hasAccess, false, 'cache was updated')
+    })
+
+    .catch(t.error)
+  })
+
   group.end()
 })
