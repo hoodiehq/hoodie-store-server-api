@@ -31,7 +31,7 @@ function replicate (state, source, target, options) {
 
   var id = toReplicationId(source, target, options)
 
-  return state.metaDb.put({
+  return state.stateStore.add({
     _id: id,
     source: source,
     target: target,
