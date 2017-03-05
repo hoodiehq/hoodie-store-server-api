@@ -22,7 +22,7 @@ test('Store', function (group) {
     })
 
     .then(function (store) {
-      return store.add({id: 'foo'})
+      return store.add({_id: 'foo'})
     })
 
     .then(function () {
@@ -63,7 +63,7 @@ test('Store', function (group) {
     })
 
     .then(function (store) {
-      return store.add({id: 'bar'})
+      return store.add({_id: 'bar'})
     })
 
     .then(function () {
@@ -93,7 +93,7 @@ test('Store', function (group) {
     })
 
     .then(function (store) {
-      return store.add({id: 'baz'})
+      return store.add({_id: 'baz'})
     })
 
     .then(function () {
