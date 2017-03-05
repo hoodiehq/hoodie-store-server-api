@@ -14,12 +14,7 @@ function cancelReplication (state, source, target, options) {
       return
     }
 
-    state.metaDb.get(id)
-
-    .then(function (doc) {
-      doc._deleted = true
-      return state.metaDb.put(doc)
-    })
+    state.stateStore.remove(id)
 
     .then(function () {
       delete state.replicationsMap[id]

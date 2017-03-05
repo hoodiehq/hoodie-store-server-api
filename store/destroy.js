@@ -3,7 +3,7 @@ module.exports = destroyStore
 var getDocOrFalse = require('../utils/get-doc-or-false')
 
 function destroyStore (state, name) {
-  return getDocOrFalse(state.metaDb, name)
+  return getDocOrFalse(state.stateStore, name)
 
   .then(function (doc) {
     if (doc === false) {
@@ -11,7 +11,7 @@ function destroyStore (state, name) {
     }
 
     doc._deleted = true
-    return state.metaDb.put(doc)
+    return state.stateStore.update(doc)
   })
 
   .then(function () {

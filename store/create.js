@@ -38,7 +38,7 @@ function createStore (state, name, options) {
       })
     }
 
-    return state.metaDb.put(doc)
+    return state.stateStore.add(doc)
 
     .then(function () {
       if (!state.usesHttpAdapter) {
