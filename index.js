@@ -31,25 +31,22 @@ function StoreAPIFactory (PouchDB) {
   // https://github.com/hoodiehq/pouchdb-hoodie-api
   PouchDB.plugin(hoodieApi)
 
-  var metaDb = new PouchDB('hoodie-store')
+  var stateStore = new PouchDB('hoodie-store').hoodieApi()
   var replicationsMap = {}
   var adapter = new PouchDB('hack', {skip_setup: true}).adapter
   var usesHttpAdapter = adapter === 'http' || adapter === 'https'
-  var couchDbUrl = toCouchDbUrl(metaDb.__opts)
+  var couchDbUrl = toCouchDbUrl(stateStore.db.__opts)
 
-  var replicationsReady = metaDb.allDocs({
-    include_docs: true,
-    startkey: replicationIdPrefix,
-    endkey: replicationIdPrefix + '\uffff'
-  }).then(function (result) {
-    return result.rows.forEach(function (row) {
-      if (replicationsMap[row.id]) {
-        return
-      }
+  var replicationsReady = stateStore.withIdPrefix(replicationIdPrefix).findAll()
+    .then(function (replications) {
+      return replications.forEach(function (replication) {
+        if (replicationsMap[replication._id]) {
+          return
+        }
 
-      replicationsMap[row.id] = PouchDB.replicate(row.doc.source, row.doc.target, row.doc.options)
+        replicationsMap[replication._id] = PouchDB.replicate(replication.source, replication.target, replication.options)
+      })
     })
-  })
 
   if (usesHttpAdapter) {
     replicationsReady = replicationsReady.then(function () {
@@ -79,7 +76,7 @@ function StoreAPIFactory (PouchDB) {
 
   var state = {
     PouchDB: PouchDB,
-    metaDb: metaDb,
+    stateStore: stateStore,
     couchDbUrl: couchDbUrl,
     usesHttpAdapter: usesHttpAdapter,
     replicationsReady: replicationsReady,

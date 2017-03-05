@@ -4,8 +4,19 @@ var StoreAPIFactory = require('../..')
 
 var PouchDBMock = function () {
   return {
-    allDocs: function () {
-      return Promise.resolve({rows: []})
+    hoodieApi: function () {
+      return {
+        db: {
+          __opts: {}
+        },
+        withIdPrefix: function () {
+          return {
+            findAll: function () {
+              return Promise.resolve([])
+            }
+          }
+        }
+      }
     }
   }
 }

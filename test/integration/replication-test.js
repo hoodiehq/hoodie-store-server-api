@@ -45,8 +45,8 @@ test('Store', function (group) {
 
     .then(function () {
       // simulate bootstrapping of live replications on restart
-      var metaDb = new PouchDB('hoodie-store')
-      return metaDb.put({
+      var stateDb = new PouchDB('hoodie-store')
+      return stateDb.put({
         _id: 'replication_db2_db1',
         source: 'db2',
         target: 'db1',
