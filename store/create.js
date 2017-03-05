@@ -40,7 +40,7 @@ function createStore (state, name, options) {
 
     return state.stateStore.add(doc)
 
-    .then(function () {
+    .then(function (doc) {
       if (!state.usesHttpAdapter) {
         var db = new state.PouchDB(name)
         return db.info()
@@ -67,6 +67,8 @@ function createStore (state, name, options) {
           throw error
         })
       }
+
+      state.cache.set(doc)
 
       return new state.PouchDB(name).info().then(function () {
         var options = {

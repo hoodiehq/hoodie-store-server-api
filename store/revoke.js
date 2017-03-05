@@ -12,4 +12,8 @@ function revokeAccess (state, name, options) {
       removeRolePrivilege(doc.access, getRoleOption(options), privilege)
     })
   })
+
+  .then(function (doc) {
+    return state.cache.set(doc)
+  })
 }

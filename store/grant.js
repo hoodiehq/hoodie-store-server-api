@@ -12,4 +12,8 @@ function grantAccess (state, name, options) {
       addRolePrivilege(doc.access, getRoleOption(options), privilege)
     })
   })
+
+  .then(function (doc) {
+    return state.cache.set(doc)
+  })
 }

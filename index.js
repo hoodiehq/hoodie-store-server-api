@@ -20,6 +20,7 @@ var revokeAccess = require('./store/revoke')
 var replicate = require('./store/replicate')
 var cancelReplication = require('./store/cancel-replication')
 
+var cache = require('./utils/cache')
 var replicationIdPrefix = require('./utils/to-replication-id').prefix
 var toCouchDbUrl = require('./utils/pouchdb-options-to-couchdb-url')
 
@@ -81,7 +82,8 @@ function StoreAPIFactory (PouchDB) {
     usesHttpAdapter: usesHttpAdapter,
     replicationsReady: replicationsReady,
     replicationsMap: replicationsMap,
-    emitter: new EventEmitter()
+    emitter: new EventEmitter(),
+    cache: cache(stateStore)
   }
   var Store = {}
 
