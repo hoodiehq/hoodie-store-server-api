@@ -2,8 +2,8 @@ module.exports = getDocOrFalse
 
 var toDbId = require('./to-db-id')
 
-function getDocOrFalse (stateStore, name) {
-  return stateStore.find(toDbId(name))
+function getDocOrFalse (state, name) {
+  return state.cache.get(toDbId(name))
 
   .catch(function (error) {
     if (error.status === 404) {

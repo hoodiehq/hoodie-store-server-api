@@ -7,7 +7,7 @@ var hasRolePrivilege = require('../utils/has-role-privilege')
 var toDbId = require('../utils/to-db-id')
 
 function hasAccess (state, name, options) {
-  return state.stateStore.find(toDbId(name))
+  return state.cache.get(toDbId(name))
 
   .then(function (doc) {
     var privileges = _.concat(options.access)
