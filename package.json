@@ -31,7 +31,7 @@
   "devDependencies": {
     "coveralls": "^2.11.15",
     "greenkeeper-postpublish": "^1.0.1",
-    "nock": "^9.0.2",
+    "nock": "^9.0.13",
     "nyc": "^10.0.0",
     "pouchdb-adapter-http": "^6.1.0",
     "pouchdb-adapter-memory": "^6.1.0",
