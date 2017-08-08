@@ -8,8 +8,7 @@
     "test": "nyc tap 'test/{unit,integration}/**/*-test.js'",
     "start": "bin/server",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "postsemantic-release": "npm run coverage",
-    "postpublish": "greenkeeper-postpublish"
+    "postsemantic-release": "npm run coverage"
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,6 @@
   "homepage": "https://github.com/hoodiehq/hoodie-store-server-api#readme",
   "devDependencies": {
     "coveralls": "^2.11.15",
-    "greenkeeper-postpublish": "^1.0.1",
     "nock": "^9.0.13",
     "nyc": "^11.0.0",
     "pouchdb-adapter-http": "^6.1.0",
