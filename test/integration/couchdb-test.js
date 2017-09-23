@@ -1,3 +1,4 @@
+var lolex = require('lolex')
 var nock = require('nock')
 var PouchDB = require('pouchdb-core')
   .plugin(require('pouchdb-adapter-http'))
@@ -6,6 +7,13 @@ var test = require('tap').test
 var StoreAPIFactory = require('../..')
 
 test('Store', function (group) {
+  // mock the Date object to always return 1970-01-01T00:00:00.000Z
+  var clock = lolex.install({now: 0, toFake: ['Date']})
+
+  group.teardown(function () {
+    clock.uninstall()
+  })
+
   group.test('Sets /hoodie-store/_security', function (t) {
     t.plan(1)
 
@@ -36,7 +44,8 @@ test('Store', function (group) {
       // create database doc in hoodie-store
       .put('/hoodie-store/db_couchdb-test-db', {
         _id: 'db_couchdb-test-db',
-        access: {read: {role: []}, write: {role: []}}
+        access: {read: {role: []}, write: {role: []}},
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '1-00'})
 
@@ -98,7 +107,8 @@ test('Store', function (group) {
       // create database doc in hoodie-store
       .put('/hoodie-store/db_foo%2Fbar', {
         _id: 'db_foo/bar',
-        access: {read: {role: []}, write: {role: []}}
+        access: {read: {role: []}, write: {role: []}},
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_foo/bar', rev: '1-000'})
 
@@ -160,7 +170,8 @@ test('Store', function (group) {
       // create database doc in hoodie-store
       .put('/hoodie-store/db_couchdb-test-db', {
         _id: 'db_couchdb-test-db',
-        access: {read: {role: ['acme-inc']}, write: {role: []}}
+        access: {read: {role: ['acme-inc']}, write: {role: []}},
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '1-000'})
 
@@ -220,7 +231,8 @@ test('Store', function (group) {
       // create database doc in hoodie-store
       .put('/hoodie-store/db_couchdb-test-db', {
         _id: 'db_couchdb-test-db',
-        access: {read: {role: []}, write: {role: []}}
+        access: {read: {role: []}, write: {role: []}},
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '1-00'})
 
@@ -259,7 +271,8 @@ test('Store', function (group) {
         access: {
           read: {role: true},
           write: {role: []}
-        }
+        },
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '2-000'})
 
@@ -280,7 +293,8 @@ test('Store', function (group) {
         access: {
           read: {role: []},
           write: {role: []}
-        }
+        },
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '3-000'})
 
@@ -301,7 +315,8 @@ test('Store', function (group) {
         access: {
           read: {role: ['foo']},
           write: {role: []}
-        }
+        },
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '4-000'})
 
@@ -322,7 +337,8 @@ test('Store', function (group) {
         access: {
           read: {role: []},
           write: {role: []}
-        }
+        },
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '5-000'})
 
@@ -343,7 +359,8 @@ test('Store', function (group) {
         access: {
           read: {role: []},
           write: {role: ['bar']}
-        }
+        },
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '6-000'})
 
@@ -364,7 +381,8 @@ test('Store', function (group) {
         access: {
           read: {role: true},
           write: {role: true}
-        }
+        },
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '7-000'})
 
@@ -443,7 +461,8 @@ test('Store', function (group) {
       // create database doc in hoodie-store
       .put('/hoodie-store/db_couchdb-test-db', {
         _id: 'db_couchdb-test-db',
-        access: {read: {role: []}, write: {role: []}}
+        access: {read: {role: []}, write: {role: []}},
+        hoodie: { createdAt: '1970-01-01T00:00:00.000Z' }
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '1-00'})
 
