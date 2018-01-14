@@ -20,8 +20,7 @@ jobs:
     - node_js: 9
       script:
         - npm run test
-        - npm run test:coverage
-        - npm run test:coverage:upload
+        - npm run coverage
     - stage: release
       node_js: lts/*
       script:
