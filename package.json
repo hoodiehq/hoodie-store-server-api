@@ -7,8 +7,7 @@
     "pretest": "standard",
     "test": "nyc tap 'test/{unit,integration}/**/*-test.js'",
     "start": "bin/server",
-    "semantic-release": "semantic-release",
-    "postsemantic-release": "npm run coverage"
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
