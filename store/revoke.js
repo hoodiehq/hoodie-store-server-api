@@ -13,7 +13,7 @@ function revokeAccess (state, name, options) {
     })
   })
 
-  .then(function (doc) {
-    return state.cache.set(doc)
-  })
+    .then(function (doc) {
+      return state.cache.set(doc)
+    })
 }

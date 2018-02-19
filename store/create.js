@@ -15,74 +15,74 @@ var toDbId = require('../utils/to-db-id')
 function createStore (state, name, options) {
   return storeExists(state, name)
 
-  .then(function (doesExist) {
-    if (doesExist) {
-      throw errors.CONFLICT
-    }
+    .then(function (doesExist) {
+      if (doesExist) {
+        throw errors.CONFLICT
+      }
 
-    var doc = {
-      _id: toDbId(name),
-      access: {
-        read: {
-          role: []
-        },
-        write: {
-          role: []
+      var doc = {
+        _id: toDbId(name),
+        access: {
+          read: {
+            role: []
+          },
+          write: {
+            role: []
+          }
         }
       }
-    }
 
-    if (options) {
-      _.concat(options.access).forEach(function (privilege) {
-        addRolePrivilege(doc.access, getRoleOption(options), privilege)
-      })
-    }
-
-    return state.stateStore.add(doc)
-
-    .then(function (doc) {
-      if (!state.usesHttpAdapter) {
-        var db = new state.PouchDB(name)
-        return db.info()
-
-        // TODO: remove once https://github.com/pouchdb/pouchdb/issues/5668 is resolved
-        // also remove mkdirp from package.json unless it’s used somewhere else
-        .catch(function (error) {
-          if (error.name === 'OpenError') {
-            var path = db.__opts.prefix ? db.__opts.prefix + name : name
-            return new Promise(function (resolve, reject) {
-              mkdirp(pathResolve(path), function (error) {
-                if (error) {
-                  return reject(error)
-                }
-
-                resolve()
-              })
-            })
-
-            .then(function () {
-              return new state.PouchDB(name).info()
-            })
-          }
-          throw error
+      if (options) {
+        _.concat(options.access).forEach(function (privilege) {
+          addRolePrivilege(doc.access, getRoleOption(options), privilege)
         })
       }
 
-      state.cache.set(doc)
+      return state.stateStore.add(doc)
 
-      return new state.PouchDB(name).info().then(function () {
-        var options = {
-          couchDbUrl: state.couchDbUrl,
-          dbName: name
-        }
-        return setSecurity(options)
-      })
+        .then(function (doc) {
+          if (!state.usesHttpAdapter) {
+            var db = new state.PouchDB(name)
+            return db.info()
+
+            // TODO: remove once https://github.com/pouchdb/pouchdb/issues/5668 is resolved
+            // also remove mkdirp from package.json unless it’s used somewhere else
+              .catch(function (error) {
+                if (error.name === 'OpenError') {
+                  var path = db.__opts.prefix ? db.__opts.prefix + name : name
+                  return new Promise(function (resolve, reject) {
+                    mkdirp(pathResolve(path), function (error) {
+                      if (error) {
+                        return reject(error)
+                      }
+
+                      resolve()
+                    })
+                  })
+
+                    .then(function () {
+                      return new state.PouchDB(name).info()
+                    })
+                }
+                throw error
+              })
+          }
+
+          state.cache.set(doc)
+
+          return new state.PouchDB(name).info().then(function () {
+            var options = {
+              couchDbUrl: state.couchDbUrl,
+              dbName: name
+            }
+            return setSecurity(options)
+          })
+        })
     })
-  })
 
-  .then(function () {
-    state.emitter.emit('create', name)
+    .then(function () {
+      state.emitter.emit('create', name)
 
-    return name
-  })
+      return name
+    })
 }

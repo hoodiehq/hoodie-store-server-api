@@ -19,9 +19,9 @@ test('Store events', function (group) {
 
     Store.create('db')
 
-    .then(function () {
-      Store.destroy('db')
-    })
+      .then(function () {
+        Store.destroy('db')
+      })
   })
 
   group.test('.one', function (t) {
@@ -35,9 +35,9 @@ test('Store events', function (group) {
 
     Store.create('db2')
 
-    .then(function () {
-      Store.create('db22')
-    })
+      .then(function () {
+        Store.create('db22')
+      })
   })
 
   group.test('.off', function (t) {
@@ -52,9 +52,9 @@ test('Store events', function (group) {
 
     Store.create('db3')
 
-    .then(function () {
-      t.end()
-    })
+      .then(function () {
+        t.end()
+      })
   })
 
   group.end()

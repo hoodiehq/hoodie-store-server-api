@@ -23,10 +23,10 @@ function cache (stateStore) {
 
       return stateStore.find(key)
 
-      .then(function (doc) {
-        memory[key] = doc
-        return doc
-      })
+        .then(function (doc) {
+          memory[key] = doc
+          return doc
+        })
     },
 
     set: function (doc) {

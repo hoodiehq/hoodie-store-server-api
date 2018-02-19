@@ -11,95 +11,95 @@ test('Store', function (group) {
 
     Store.create('dbname')
 
-    .then(function () {
-      return Store.hasAccess('dbname', {access: 'read'})
-    })
+      .then(function () {
+        return Store.hasAccess('dbname', {access: 'read'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, false, 'nobody should have access to a db by default')
+      .then(function (hasAccess) {
+        t.is(hasAccess, false, 'nobody should have access to a db by default')
 
-      return Store.grant('dbname', {access: 'read'})
-    })
+        return Store.grant('dbname', {access: 'read'})
+      })
 
-    .then(function () {
-      return Store.hasAccess('dbname', {access: 'read'})
-    })
+      .then(function () {
+        return Store.hasAccess('dbname', {access: 'read'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, true, 'hasAccess changes after access granted')
+      .then(function (hasAccess) {
+        t.is(hasAccess, true, 'hasAccess changes after access granted')
 
-      return Store.revoke('dbname', {access: 'read'})
-    })
+        return Store.revoke('dbname', {access: 'read'})
+      })
 
-    .then(function () {
-      return Store.hasAccess('dbname', {access: 'read'})
-    })
+      .then(function () {
+        return Store.hasAccess('dbname', {access: 'read'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, false, 'hasAccess revoked')
+      .then(function (hasAccess) {
+        t.is(hasAccess, false, 'hasAccess revoked')
 
-      return Store.grant('dbname', {access: 'read', role: 'foo'})
-    })
+        return Store.grant('dbname', {access: 'read', role: 'foo'})
+      })
 
-    .then(function () {
-      return Store.hasAccess('dbname', {access: 'read'})
-    })
+      .then(function () {
+        return Store.hasAccess('dbname', {access: 'read'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, false, 'hasAccess({access: "read"}) returns false if read is limited to role')
+      .then(function (hasAccess) {
+        t.is(hasAccess, false, 'hasAccess({access: "read"}) returns false if read is limited to role')
 
-      return Store.hasAccess('dbname', {access: 'read', role: 'foo'})
-    })
+        return Store.hasAccess('dbname', {access: 'read', role: 'foo'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, true, 'hasAccess({access: "read", role: "foo"}) returns true if that role was granted access before')
+      .then(function (hasAccess) {
+        t.is(hasAccess, true, 'hasAccess({access: "read", role: "foo"}) returns true if that role was granted access before')
 
-      return Store.revoke('dbname', {access: 'read', role: 'foo'})
-    })
+        return Store.revoke('dbname', {access: 'read', role: 'foo'})
+      })
 
-    .then(function () {
-      return Store.hasAccess('dbname', {access: 'read', role: 'foo'})
-    })
+      .then(function () {
+        return Store.hasAccess('dbname', {access: 'read', role: 'foo'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, false, 'hasAccess({access: "read", role: "foo"}) returns false after access revoked')
+      .then(function (hasAccess) {
+        t.is(hasAccess, false, 'hasAccess({access: "read", role: "foo"}) returns false after access revoked')
 
-      return Store.grant('dbname', {access: 'write', role: 'bar'})
-    })
+        return Store.grant('dbname', {access: 'write', role: 'bar'})
+      })
 
-    .then(function () {
-      return Store.hasAccess('dbname', {access: 'write', role: ['foo', 'bar', 'baz']})
-    })
+      .then(function () {
+        return Store.hasAccess('dbname', {access: 'write', role: ['foo', 'bar', 'baz']})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, true, 'hasAccess({access: "write", role: ["foo", "bar", "baz"]}) returns true if "bar" has write access')
+      .then(function (hasAccess) {
+        t.is(hasAccess, true, 'hasAccess({access: "write", role: ["foo", "bar", "baz"]}) returns true if "bar" has write access')
 
-      return Store.grant('dbname', {access: ['read', 'write']})
-    })
+        return Store.grant('dbname', {access: ['read', 'write']})
+      })
 
-    .then(function () {
-      return Store.hasAccess('dbname', {access: ['read', 'write']})
-    })
+      .then(function () {
+        return Store.hasAccess('dbname', {access: ['read', 'write']})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, true, 'public read / write')
+      .then(function (hasAccess) {
+        t.is(hasAccess, true, 'public read / write')
 
-      return Store.grant('unknown', {access: 'read'})
-    })
+        return Store.grant('unknown', {access: 'read'})
+      })
 
-    .then(function () {
-      t.fail('Store.grant should reject for non-existing database')
-    })
+      .then(function () {
+        t.fail('Store.grant should reject for non-existing database')
+      })
 
-    .catch(function (error) {
-      t.is(error.status, 404, 'store.add fails because database "dbname" does not exist')
+      .catch(function (error) {
+        t.is(error.status, 404, 'store.add fails because database "dbname" does not exist')
 
-      return Store.destroy('dbname')
-    })
+        return Store.destroy('dbname')
+      })
 
-    .then(t.ok)
+      .then(t.ok)
 
-    .catch(t.error)
+      .catch(t.error)
   })
 
   group.test('create with access for "acme-inc"', function (t) {
@@ -112,21 +112,21 @@ test('Store', function (group) {
       role: 'acme-inc'
     })
 
-    .then(function () {
-      return Store.hasAccess('secure-db', {access: 'read'})
-    })
+      .then(function () {
+        return Store.hasAccess('secure-db', {access: 'read'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, false, 'is not public-read')
+      .then(function (hasAccess) {
+        t.is(hasAccess, false, 'is not public-read')
 
-      return Store.hasAccess('secure-db', {access: 'read', role: 'acme-inc'})
-    })
+        return Store.hasAccess('secure-db', {access: 'read', role: 'acme-inc'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, true, '"acme-inc" has access')
-    })
+      .then(function (hasAccess) {
+        t.is(hasAccess, true, '"acme-inc" has access')
+      })
 
-    .catch(t.error)
+      .catch(t.error)
   })
 
   group.test('cache invalidation', function (t) {
@@ -138,34 +138,34 @@ test('Store', function (group) {
       access: 'read'
     })
 
-    .then(function () {
-      return Store.hasAccess('cache-test-db', {access: 'read'})
-    })
+      .then(function () {
+        return Store.hasAccess('cache-test-db', {access: 'read'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, true, 'is public-read')
+      .then(function (hasAccess) {
+        t.is(hasAccess, true, 'is public-read')
 
-      var stateStore = new PouchDB('hoodie-store').hoodieApi()
-      return new Promise(function (resolve, reject) {
-        stateStore.on('update', resolve)
+        var stateStore = new PouchDB('hoodie-store').hoodieApi()
+        return new Promise(function (resolve, reject) {
+          stateStore.on('update', resolve)
 
-        stateStore.update('db_cache-test-db', function (doc) {
-          doc.access.read.role = []
+          stateStore.update('db_cache-test-db', function (doc) {
+            doc.access.read.role = []
+          })
         })
       })
-    })
 
-    .then(function (doc) {
-      t.deepEqual(doc.access.read.role, [], 'db is no longer public read')
+      .then(function (doc) {
+        t.deepEqual(doc.access.read.role, [], 'db is no longer public read')
 
-      return Store.hasAccess('cache-test-db', {access: 'read'})
-    })
+        return Store.hasAccess('cache-test-db', {access: 'read'})
+      })
 
-    .then(function (hasAccess) {
-      t.is(hasAccess, false, 'cache was updated')
-    })
+      .then(function (hasAccess) {
+        t.is(hasAccess, false, 'cache was updated')
+      })
 
-    .catch(t.error)
+      .catch(t.error)
   })
 
   group.end()

@@ -9,10 +9,10 @@ var toDbId = require('../utils/to-db-id')
 function hasAccess (state, name, options) {
   return state.cache.get(toDbId(name))
 
-  .then(function (doc) {
-    var privileges = _.concat(options.access)
-    return privileges.filter(function (privilege) {
-      return hasRolePrivilege(doc.access, getRoleOption(options), privilege)
-    }).length === privileges.length
-  })
+    .then(function (doc) {
+      var privileges = _.concat(options.access)
+      return privileges.filter(function (privilege) {
+        return hasRolePrivilege(doc.access, getRoleOption(options), privilege)
+      }).length === privileges.length
+    })
 }

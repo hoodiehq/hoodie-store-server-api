@@ -38,13 +38,13 @@ function replicate (state, source, target, options) {
     options: options
   })
 
-  .then(function (doc) {
-    var replication = state.PouchDB.replicate(source, target, options)
+    .then(function (doc) {
+      var replication = state.PouchDB.replicate(source, target, options)
 
-    state.replicationsMap[id] = replication
+      state.replicationsMap[id] = replication
 
-    return {
-      replication: replication
-    }
-  })
+      return {
+        replication: replication
+      }
+    })
 }

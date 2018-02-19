@@ -69,12 +69,12 @@ test('Store', function (group) {
 
     return Store.create('couchdb-test-db')
 
-    .then(function () {
+      .then(function () {
       // check if all mocks have been consumed, and show the first pending if not
-      t.is(mock.pendingMocks()[0], undefined)
-    })
+        t.is(mock.pendingMocks()[0], undefined)
+      })
 
-    .catch(t.error)
+      .catch(t.error)
   })
 
   group.test('works with / in name', function (t) {
@@ -132,12 +132,12 @@ test('Store', function (group) {
 
     return Store.create('foo/bar')
 
-    .then(function () {
+      .then(function () {
       // check if all mocks have been consumed, and show the first pending if not
-      t.is(mock.pendingMocks()[0], undefined)
-    })
+        t.is(mock.pendingMocks()[0], undefined)
+      })
 
-    .catch(t.error)
+      .catch(t.error)
   })
 
   group.test('Store.create sets _security members.read to acme-inc', function (t) {
@@ -175,7 +175,7 @@ test('Store', function (group) {
       })
       .reply(201, {ok: true, id: 'db_couchdb-test-db', rev: '1-000'})
 
-    // sanitiy check if database exiss
+      // sanitiy check if database exiss
       .get('/couchdb-test-db/')
       .reply(404)
 
@@ -198,12 +198,12 @@ test('Store', function (group) {
       role: 'acme-inc'
     })
 
-    .then(function () {
+      .then(function () {
       // check if all mocks have been consumed, and show the first pending if not
-      t.is(mock.pendingMocks()[0], undefined)
-    })
+        t.is(mock.pendingMocks()[0], undefined)
+      })
 
-    .catch(t.error)
+      .catch(t.error)
   })
 
   group.test('_security updates grant/revoke calls', function (t) {
@@ -393,36 +393,36 @@ test('Store', function (group) {
 
     return Store.create('couchdb-test-db')
 
-    .then(function () {
-      return Store.grant('couchdb-test-db', {access: 'read'})
-    })
+      .then(function () {
+        return Store.grant('couchdb-test-db', {access: 'read'})
+      })
 
-    .then(function () {
-      return Store.revoke('couchdb-test-db', {access: 'read'})
-    })
+      .then(function () {
+        return Store.revoke('couchdb-test-db', {access: 'read'})
+      })
 
-    .then(function () {
-      return Store.grant('couchdb-test-db', {access: 'read', role: 'foo'})
-    })
+      .then(function () {
+        return Store.grant('couchdb-test-db', {access: 'read', role: 'foo'})
+      })
 
-    .then(function () {
-      return Store.revoke('couchdb-test-db', {access: 'read', role: 'foo'})
-    })
+      .then(function () {
+        return Store.revoke('couchdb-test-db', {access: 'read', role: 'foo'})
+      })
 
-    .then(function () {
-      return Store.grant('couchdb-test-db', {access: 'write', role: 'bar'})
-    })
+      .then(function () {
+        return Store.grant('couchdb-test-db', {access: 'write', role: 'bar'})
+      })
 
-    .then(function () {
-      return Store.grant('couchdb-test-db', {access: ['read', 'write']})
-    })
+      .then(function () {
+        return Store.grant('couchdb-test-db', {access: ['read', 'write']})
+      })
 
-    .then(function () {
+      .then(function () {
       // check if all mocks have been consumed, and show the first pending if not
-      t.is(mock.pendingMocks()[0], undefined)
-    })
+        t.is(mock.pendingMocks()[0], undefined)
+      })
 
-    .catch(t.error)
+      .catch(t.error)
   })
 
   group.test('Store.exists("mydb") should not send another request after Store.create("mydb")', function (t) {
@@ -486,18 +486,18 @@ test('Store', function (group) {
 
     return Store.create('couchdb-test-db')
 
-    .then(function () {
+      .then(function () {
       // should not cause another request to CouchDB
-      return Store.exists('couchdb-test-db')
-    })
+        return Store.exists('couchdb-test-db')
+      })
 
-    .then(function () {
+      .then(function () {
       // check if all mocks have been consumed, and show the first pending if not
       // skip mock.pendingMocks()[0] as it’s the one we want to be skipped
-      t.is(mock.pendingMocks()[1], undefined)
-    })
+        t.is(mock.pendingMocks()[1], undefined)
+      })
 
-    .catch(t.error)
+      .catch(t.error)
   })
 
   group.end()

@@ -30,19 +30,19 @@ test('Store', function (group) {
 
     Store.create('dbname')
 
-    .then(function () {
-      return Store.open('dbname')
-    })
+      .then(function () {
+        return Store.open('dbname')
+      })
 
-    .then(function (store) {
-      t.is(typeof store.add, 'function', 'returns Store Instance')
+      .then(function (store) {
+        t.is(typeof store.add, 'function', 'returns Store Instance')
 
-      return Store.destroy('dbname')
-    })
+        return Store.destroy('dbname')
+      })
 
-    .then(t.ok)
+      .then(t.ok)
 
-    .catch(t.error)
+      .catch(t.error)
   })
 
   group.test('create / open / destroy walkthrough', function (t) {
@@ -52,62 +52,62 @@ test('Store', function (group) {
 
     Store.create('dbname')
 
-    .then(function (name) {
-      t.is(name, 'dbname', 'Store.create resolves with name')
+      .then(function (name) {
+        t.is(name, 'dbname', 'Store.create resolves with name')
 
-      return Store.create('dbname')
-    })
+        return Store.create('dbname')
+      })
 
-    .then(function () {
-      t.fail('Store.create should fail to create a store with name "dbname" twice')
-    }, function (error) {
-      t.is(error.status, 409, 'Store.create fails because database "dbname" already exists')
+      .then(function () {
+        t.fail('Store.create should fail to create a store with name "dbname" twice')
+      }, function (error) {
+        t.is(error.status, 409, 'Store.create fails because database "dbname" already exists')
 
-      return Store.exists('dbname')
-    })
+        return Store.exists('dbname')
+      })
 
-    .then(function (exists) {
-      t.is(exists, true, '"dbname" exists')
+      .then(function (exists) {
+        t.is(exists, true, '"dbname" exists')
 
-      return Store.open('dbname')
-    })
+        return Store.open('dbname')
+      })
 
-    .then(function (store) {
-      t.is(typeof store.add, 'function', 'opens "dbname" store')
+      .then(function (store) {
+        t.is(typeof store.add, 'function', 'opens "dbname" store')
 
-      return store.add({foo: 'bar'})
-    })
+        return store.add({foo: 'bar'})
+      })
 
-    .then(function (doc) {
-      var db = new PouchDB('dbname')
-      return db.get(doc._id)
-    })
+      .then(function (doc) {
+        var db = new PouchDB('dbname')
+        return db.get(doc._id)
+      })
 
-    .then(function (doc) {
-      t.is(doc.foo, 'bar', 'persists data using PouchDB')
+      .then(function (doc) {
+        t.is(doc.foo, 'bar', 'persists data using PouchDB')
 
-      return Store.destroy('dbname')
-    })
+        return Store.destroy('dbname')
+      })
 
-    .then(function (name) {
-      t.is(name, 'dbname', 'Store.destroy resolves with name')
+      .then(function (name) {
+        t.is(name, 'dbname', 'Store.destroy resolves with name')
 
-      return Store.exists('dbname')
-    })
+        return Store.exists('dbname')
+      })
 
-    .then(function (exists) {
-      t.is(exists, false, '"dbname" no longer exists')
+      .then(function (exists) {
+        t.is(exists, false, '"dbname" no longer exists')
 
-      return Store.open('dbname')
-    })
+        return Store.open('dbname')
+      })
 
-    .then(function () {
-      t.fail('store.add should fail after "dbname" was destroyed')
-    })
+      .then(function () {
+        t.fail('store.add should fail after "dbname" was destroyed')
+      })
 
-    .catch(function (error) {
-      t.is(error.status, 404, 'store.add fails because database "dbname" does not exist')
-    })
+      .catch(function (error) {
+        t.is(error.status, 404, 'store.add fails because database "dbname" does not exist')
+      })
   })
 
   group.end()
